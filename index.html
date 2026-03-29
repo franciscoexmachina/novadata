@@ -109,6 +109,17 @@
       object-fit: cover;
       opacity: 0.55;
     }
+    .hero-video iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 177.78vh; /* 16:9 ratio */
+      height: 56.25vw; /* 16:9 ratio */
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
 
     .hero-overlay {
       position: absolute;
@@ -662,9 +673,9 @@
 
   <!-- HERO -->
   <section class="hero">
-    <video class="hero-video" autoplay muted playsinline id="hero-vid">
-      <source src="Bus_to_Dash.mp4" type="video/mp4" />
-    </video>
+    <div class="hero-video">
+      <iframe src="https://www.youtube.com/embed/5O2Qa4Yau-s?autoplay=1&mute=1&loop=1&playlist=5O2Qa4Yau-s&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
+    </div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
@@ -1009,7 +1020,7 @@
     });
 
     // Set playback rate to 25% on all content videos
-    ['hero-vid', 'about-vid'].forEach(id => {
+    ['about-vid'].forEach(id => {
       const v = document.getElementById(id);
       if (!v) return;
       v.playbackRate = 0.7;
