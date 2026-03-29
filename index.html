@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Francisco Almeida — BI & AI Consultant</title>
+  <title>Nova Data — BI & AI Consulting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -308,7 +308,7 @@
       aspect-ratio: 16/10;
     }
 
-    .about-video-wrap video {
+    .about-video-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -470,15 +470,10 @@
     .exp-video-wrap {
       border-radius: 16px;
       overflow: hidden;
-      aspect-ratio: 4/5;
       position: sticky;
       top: 6rem;
-    }
-
-    .exp-video-wrap video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      background: var(--surface);
+      border: 1px solid var(--border);
     }
 
     .exp-list {
@@ -650,7 +645,7 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">Francisco <span>Almeida</span></a>
+    <a class="nav-logo" href="#">Nova <span>Data</span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -677,7 +672,7 @@
         <span class="gradient-text">drives decisions.</span>
       </h1>
       <p class="hero-sub">
-        Senior BI & AI consultant with 15+ years transforming raw enterprise data
+        Senior BI & AI consultants with 15+ years transforming raw enterprise data
         into strategic intelligence — across SAP, Power BI, and modern cloud stacks.
       </p>
       <div class="hero-actions">
@@ -754,22 +749,20 @@
   <!-- ABOUT -->
   <section id="about" class="about reveal">
     <div class="about-video-wrap">
-      <video autoplay muted playsinline id="about-vid">
-        <source src="xls_to_dash.mp4" type="video/mp4" />
-      </video>
+      <img src="data-cubes.png" alt="Data visualisation" />
     </div>
     <div class="about-text">
       <p class="section-label">About</p>
       <h2 class="section-title">BI architecture meets AI innovation.</h2>
       <p class="section-body">
-        Based in Brisbane, QLD — I partner with enterprise stakeholders to design and
-        deliver business intelligence solutions that hold up in production. My work spans
+        Based in Brisbane, QLD — we partner with enterprise stakeholders to design and
+        deliver business intelligence solutions that hold up in production. Our work spans
         architecture, development, data integration, and governance across on-premise,
         IaaS, and SaaS platforms.
       </p>
       <p class="section-body" style="margin-top:1rem;">
         From modernising legacy SAP landscapes at DXC Technology to delivering
-        Power BI occupational health dashboards at Rio Tinto — I bring both depth
+        Power BI occupational health dashboards at Rio Tinto — we bring both depth
         and breadth to every engagement.
       </p>
       <ul class="about-list">
@@ -806,7 +799,7 @@
     <div class="services-header">
       <div>
         <p class="section-label">Services</p>
-        <h2 class="section-title">What I deliver for your organisation.</h2>
+        <h2 class="section-title">What we deliver for your organisation.</h2>
       </div>
       <p class="section-body">
         End-to-end consulting from strategy to production — across SAP, Microsoft, and AI-enabled BI platforms. Designed for asset-intensive industries, utilities, rail, oil &amp; gas, and government.
@@ -899,9 +892,14 @@
     <div class="exp-layout">
       <div class="exp-sidebar">
         <div class="exp-video-wrap">
-          <video autoplay muted loop playsinline>
-            <source src="clean_office.mp4" type="video/mp4" />
-          </video>
+          <div style="padding: 1.5rem 1rem 1rem; position: relative;">
+            <div style="position: relative; width: 100%; height: 360px;">
+              <canvas id="revenueChart"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: 12px;">
+              <button onclick="replayAll()" style="font-size: 13px; padding: 6px 18px; cursor: pointer;">replay</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -959,7 +957,7 @@
       <div class="cta-right">
         <p class="section-body">
           Available for consulting engagements in Brisbane and remote across AU/NZ.
-          Let's discuss how I can help your organisation make better use of its data.
+          Let's discuss how we can help your organisation make better use of its data.
         </p>
         <div class="cta-contact-row">
           <a class="contact-link" href="mailto:franciscoexmachina@gmail.com">
@@ -986,8 +984,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <p class="footer-copy">&copy; 2026 Francisco Almeida. Brisbane, QLD.</p>
-    <p class="footer-name">All Things Data</p>
+    <p class="footer-copy">&copy; 2026 Nova Data. Brisbane, QLD.</p>
+    <p class="footer-name">Nova Data</p>
   </footer>
 
   <script>
@@ -1009,12 +1007,56 @@
     });
 
     // Set playback rate to 25% on all content videos
-    ['hero-vid', 'about-vid'].forEach(id => {
+    ['hero-vid'].forEach(id => {
       const v = document.getElementById(id);
       if (!v) return;
       v.playbackRate = 0.7;
       v.addEventListener('canplay', () => { v.playbackRate = 0.7; });
     });
+
+    // Revenue chart
+    (function() {
+      const totalPoints = 16;
+      const fullData = [4,6,5,9,11,10,15,18,17,22,26,25,32,38,42,58];
+      const labels = Array(totalPoints).fill('');
+      const lineColor = '#1D9E75';
+      const gridColor = 'rgba(255,255,255,0.07)';
+      const axisColor = 'rgba(255,255,255,0.25)';
+      const chartCanvas = document.getElementById('revenueChart');
+      let chart, current, revealTimer;
+
+      function buildChart() {
+        if (chart) chart.destroy();
+        chart = new Chart(chartCanvas, {
+          type: 'line',
+          data: { labels, datasets: [{ data: Array(totalPoints).fill(null), borderColor: lineColor, backgroundColor: 'rgba(29,158,117,0.07)', borderWidth: 2.5, pointRadius: 0, tension: 0, fill: true, spanGaps: false }] },
+          options: { responsive: true, maintainAspectRatio: false, animation: false, layout: { padding: { left: 16, bottom: 16, right: 20, top: 20 } }, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { grid: { color: gridColor }, border: { color: axisColor }, ticks: { display: false } }, y: { grid: { color: gridColor }, border: { color: axisColor }, ticks: { display: false }, min: 0, max: 70 } } }
+        });
+      }
+
+      function startReveal() {
+        current = 0;
+        chart.data.datasets[0].data = Array(totalPoints).fill(null);
+        chart.update('none');
+        if (revealTimer) clearTimeout(revealTimer);
+        function step() {
+          if (current < totalPoints) {
+            chart.data.datasets[0].data[current] = fullData[current];
+            chart.update('none');
+            current++;
+            revealTimer = setTimeout(step, 140);
+          }
+        }
+        revealTimer = setTimeout(step, 300);
+      }
+
+      window.replayAll = function() { buildChart(); setTimeout(startReveal, 50); };
+
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js';
+      script.onload = function() { buildChart(); setTimeout(startReveal, 50); };
+      document.head.appendChild(script);
+    })();
 
     // Nav background on scroll
     const nav = document.querySelector('nav');
